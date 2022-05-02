@@ -1,0 +1,4 @@
+#!/bin/bash
+
+readarray a <<< "$(qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E 'artUrl|genre|artist|album:|title:'| sed -e 's/xesam://g'| sed -e 's/mpris:artUrl: file:\/\///g')"
+toot post "${a[1]}  ${a[2]}  ${a[3]} ${a[4]}" --media ${a[0]} --debug
