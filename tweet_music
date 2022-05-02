@@ -1,0 +1,20 @@
+#!/bin/bash
+#//config. Twitteruser wihout @
+user="twitteruser"
+#//Musikinfo von Clementie Audioplayer holen
+readarray a <<< "$(qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E 'artUrl|genre|artist|album:|title:'| sed -e 's/xesam://g'| sed -e 's/mpris:artUrl: file:\/\///g')"
+#//Bild kopieren
+cp ${a[0]} $HOME/bin/twitter-pic/cover.jpg
+# Daten an den Twitterclient
+text="Ich höre gerade:${a[1]}${a[2]}${a[4]}"
+#// Bildgröße in Byte ermitteln
+byte=$(du -b cover.jpg | grep -Eo "^[0-9]+")
+#// initialisieren
+mis=$(twurl -u $user -H upload.twitter.com "/1.1/media/upload.json" -d "command=INIT&media_type=image/jpg&total_bytes=$byte" | jq .media_id_string)
+mis="${mis:1: -1}"
+#//hochladen
+twurl -u $user -H upload.twitter.com "/1.1/media/upload.json" -d "command=APPEND&media_id=$mis&segment_index=0" --file cover.jpg --file-field "media" | jq .
+#//finalisieren
+twurl -u $user -H upload.twitter.com "/1.1/media/upload.json" -d "command=FINALIZE&media_id=$mis" | jq .
+#//text hinzufügen
+twurl -u $user "/1.1/statuses/update.json" -d "media_ids=$mis&status=$text"
