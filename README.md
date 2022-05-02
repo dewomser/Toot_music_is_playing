@@ -3,4 +3,4 @@ Needs KDE ,Clementine Musicplayer, toot and twurl
 
 Send playing music metainformations as tweet.
 
-![alt text](./bilder/music-tweet.png "Screenshot Twitter")
+![alt text](./images/music-tweet.png "Screenshot Twitter")
