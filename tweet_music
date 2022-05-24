@@ -7,7 +7,7 @@ user="dewomser"
 #//Musikinfo von Clementie Audioplayer holen
 readarray a <<< "$(qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E 'artUrl|genre|artist|album:|title:'| sed -e 's/xesam://g'| sed -e 's/mpris:artUrl: file:\/\///g')"
 #//Bild kopieren
-pfad=$(pwd)
+#pfad=$(pwd)
 cp ${a[0]} cover.jpg
 #cp ${a[0]} $HOME/bin/twitter-pic/cover.jpg
 # Daten an den Twitterclient
