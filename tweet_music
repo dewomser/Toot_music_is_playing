@@ -1,7 +1,8 @@
 #!/bin/bash
 #//config
 #Path twurlis not EXPORT
-twurlp="/usr/bin/ruby /home/karl/.local/share/gem/ruby/3.0.0/bin/twurl"
+# shellcheck disable=SC2086 # code is irrelevant because it is already double quoted grrrr…
+ twurlp="/usr/bin/ruby /home/karl/.local/share/gem/ruby/3.0.0/bin/twurl"
 #twurlp="twurl"
 user="dewomser"
 #//Musikinfo von Clementie Audioplayer holen
