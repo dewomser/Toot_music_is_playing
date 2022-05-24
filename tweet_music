@@ -1,21 +1,18 @@
 #!/bin/bash
-#//config. Twitteruser wihout @
+#//config
+#Path twurlis not EXPORT
+twurlp="/usr/bin/ruby /home/karl/.local/share/gem/ruby/3.0.0/bin/twurl"
+#twurlp="twurl"
 user="dewomser"
-#if you need full path … find with which ruby ; which twurl
-#twurlp="/usr/bin/ruby /home/foo/.local/share/gem/ruby/3.0.0/bin/twurl"
-twurlp="twurl"
-user="twitteruser"
 #//Musikinfo von Clementie Audioplayer holen
 readarray a <<< "$(qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E 'artUrl|genre|artist|album:|title:'| sed -e 's/xesam://g'| sed -e 's/mpris:artUrl: file:\/\///g')"
-
 #//Bild kopieren
-# no quotes variable no format - strip \n
 pfad=$(pwd)
-# shellcheck disable=SC2086
-cp ${a[0]} "$pfad/cover.jpg"
-#cp ${a[0]} $HOME/git/twitter-pic/cover.jpg
+cp ${a[0]} cover.jpg
+#cp ${a[0]} $HOME/bin/twitter-pic/cover.jpg
 # Daten an den Twitterclient
-text="Ich höre gerade:${a[1]}${a[2]}${a[4]}"
+text1=$'ich höre gerade: \n'
+text="$text1${a[1]}${a[2]}${a[4]}"
 #// Bildgröße in Byte ermitteln
 byte=$(du -b cover.jpg | grep -Eo "^[0-9]+")
 #// initialisieren
