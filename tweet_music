@@ -1,19 +1,29 @@
 #!/bin/bash
 #//config
 #Path twurlis not EXPORT
-# shellcheck disable=SC2086 # code is irrelevant because it is already double quoted grrrr…
- twurlp="/usr/bin/ruby /home/karl/.local/share/gem/ruby/3.0.0/bin/twurl"
+twurlp="/usr/bin/ruby /home/karl/.local/share/gem/ruby/3.0.0/bin/twurl"
 #twurlp="twurl"
 user="dewomser"
 #//Musikinfo von Clementie Audioplayer holen
-readarray a <<< "$(qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E 'artUrl|genre|artist|album:|title:'| sed -e 's/xesam://g'| sed -e 's/mpris:artUrl: file:\/\///g')"
+readarray -t a <<< "$(qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E 'artUrl|genre|artist|album:|title:'| sed -e 's/xesam://g'| sed -e 's/mpris:artUrl: file:\/\///g')"
 #//Bild kopieren
-#pfad=$(pwd)
-cp "${a[0]}" cover.jpg
-#cp ${a[0]} $HOME/bin/twitter-pic/cover.jpg
+pfad=$(pwd)
+#cp ${a[0]} "$pfad"cover.jpg
+cp ${a[0]} $PWD/cover.jpg
 # Daten an den Twitterclient
-text1=$'ich höre gerade: \n'
-text="$text1${a[1]}${a[2]}${a[4]}"
+a[5]="https://www.youtube.com/results?search_query=${a[2]} ${a[4]}"
+lolo="${a[5]// /+}"
+
+text1=$"ich höre gerade:"
+text="$text1
+${a[1]}
+${a[2]}
+${a[4]}
+$lolo"
+
+echo $text
+
+#exit
 #// Bildgröße in Byte ermitteln
 byte=$(du -b cover.jpg | grep -Eo "^[0-9]+")
 #// initialisieren
