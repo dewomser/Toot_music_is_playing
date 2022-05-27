@@ -1,5 +1,23 @@
 #!/bin/bash
-readarray -t a <<< "$(qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E 'artUrl|genre|artist|album:|title:'| sed -e 's/xesam://g'| sed -e 's/mpris:artUrl:[[:space:]]file:\/\///g')"
+#//config
+function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
+clementine=$(qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus)
+vlc=$(qdbus org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus)
+
+if [ "$clementine" == "Playing" ]
+then
+  player=clementine
+elif [ "$vlc" == "Playing" ]
+then
+ player=vlc
+else
+  exit
+fi
+
+readarray -t a <<< "$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E 'artUrl|genre|artist|album:|title:'| sed -e 's/xesam://g'| sed -e 's/mpris:artUrl:[[:space:]]file:\/\///g')"
 a[5]="https://www.youtube.com/results?search_query=${a[2]} ${a[4]}"
 lolo=${a[5]// /+}
-echo -e "Ich höre gerade \n${a[1]}\n${a[2]}\n${a[3]}\n${a[4]}\nVideo (geraten): $lolo" | toot post --media "${a[0]}"
+
+lolo1=$(urldecode "${a[0]}")
+cp "$lolo1" "$PWD"/cover.jpg
+echo -e "Ich höre gerade \n${a[4]}\n${a[2]}\n${a[1]}\n${a[3]}\nAudio-player:$player\nVideo(geraten):$lolo" | toot post --media "cover.jpg"
