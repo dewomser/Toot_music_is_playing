@@ -11,6 +11,7 @@ Needs Linux/KDE with mpris, Bash,Toot
 
 Toot must be authorized at the Mastodon instance.
 
+Bonus: Suggestion yt
 
 ## tweet_music
 
@@ -19,6 +20,8 @@ Pushes Metatags of Audio-Players  VLC or Clementine to your Twitter account
 Needs Linux/KDE with mpris, Bash,Twurl
 
 Twurl needs to be be authorized at Twitter
+
+Bonus: Suggestion yt
 
 
 ![alt text](./images/music-tweet.png "Screenshot Twitter")
