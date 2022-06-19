@@ -9,7 +9,7 @@ Pushes Metatags of Audio-Players  VLC or Clementine to your Mastodon account
 
 Needs Linux/KDE with mpris, Bash,Toot
 
-Toot must be authorized at the Mastodon instance
+Toot must be authorized at the Mastodon instance.
 
 
 ## tweet_music

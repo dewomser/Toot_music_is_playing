@@ -1,6 +1,9 @@
 #!/bin/bash
 
 #//config
+BASEDIR=$(readlink -f "$0" | xargs dirname)
+
+
 function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 clementine=$(qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus)
 vlc=$(qdbus org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus)
@@ -26,7 +29,7 @@ readarray -t a <<< "$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlaye
 #//Bild kopieren
 lolo1=$(urldecode "${a[0]}")
 
-convert "$lolo1" -gravity south   -background YellowGreen  -splice 0x18 -annotate +0+2 'Die Tweet_Music-App ist vom @dewomser' cover.jpg
+convert "$lolo1" -gravity south   -background YellowGreen  -splice 0x18 -annotate +0+2 'Die Tweet_Music-App ist vom @dewomser' "$BASEDIR"/cover.jpg
 
 #cp "$lolo1" "$PWD"/cover.jpg
 
@@ -48,7 +51,7 @@ mis=$($twurlp -u $user -H upload.twitter.com "/1.1/media/upload.json" -d "comman
 # jq -r macht das jetzt mis="${mis:1: -1}"
 
 #//hochladen
-$twurlp -u $user -H upload.twitter.com "/1.1/media/upload.json" -d "command=APPEND&media_id=$mis&segment_index=0" --file cover.jpg --file-field "media" | jq .
+$twurlp -u $user -H upload.twitter.com "/1.1/media/upload.json" -d "command=APPEND&media_id=$mis&segment_index=0" --file "$BASEDIR"/cover.jpg --file-field "media" | jq .
 
 
 #//finalisieren
