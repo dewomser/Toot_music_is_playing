@@ -24,7 +24,26 @@ twurlp="/usr/bin/ruby /home/karl/.local/share/gem/ruby/3.0.0/bin/twurl"
 user="dewomser"
 
 #//Musikinfo von Clementie Audioplayer holen
-readarray -t a <<< "$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E 'artUrl|genre|artist|album:|title:'| sed -e 's/xesam://g'| sed -e 's/mpris:artUrl: file:\/\///g')"
+
+# Ohne Test ob Variablen einenWert haben (von den 5 darf keine leer sein)
+
+#readarray -t a <<< "$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E 'artUrl|genre|artist|album:|title:'| sed -e 's/xesam://g'| sed -e 's/mpris:artUrl: file:\/\///g')"
+
+# Mit Test ob Variablen einen Wert haben
+# Test und Feedback ist erwünscht.
+
+
+a[0]="$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl: file:\/\///g')"
+if [ -z "${a[0]}" ]; then  a[0]="nocover.jpg"; fi
+
+a[1]="$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artist | sed -e 's/xesam://g')"
+if [ -z "${a[1]}" ]; then  a[1]="ohne"; fi
+
+a[2]="$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E album: | sed -e 's/xesam://g')"
+if [ -z "${a[2]}" ]; then  a[2]="ohne"; fi
+
+a[4]="$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E title: | sed -e 's/xesam://g')"
+if [ -z "${a[4]}" ]; then  a[4]="ohne"; fi
 
 #//Bild kopieren
 lolo1=$(urldecode "${a[0]}")
