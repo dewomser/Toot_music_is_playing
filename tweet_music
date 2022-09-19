@@ -42,7 +42,8 @@ user="dewomser"
 
 if [ "$player" == "plasma-browser-integration" ]
 then
-wget "$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')" -O cover.jpg
+lolo3="wget $(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')"
+$lolo3 -O cover.jpg
 a[0]=cover.jpg
 else
 a[0]="$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl: file:\/\///g')"
