@@ -20,13 +20,16 @@ Finds Metatags of Audio-Players
 *  Clementine (KDE)
 *  Elisa (KDE)
 *  Chrome und Firefox mit Plasma-integration
+
 and sends as a Tweet to your Twitter-account
 
-Needs Linux/KDE with mpris, Bash,Twurl
+Needs Linux/KDE with mpris, Bash, Twurl
 
-Twurl needs to be be authorized at Twitter
+Twurl needs to be be authorized by Twitter
 
 Bonus: Suggests a Link to yt
+
+Example:
 
 
 ![alt text](./images/music-tweet.png "Screenshot Twitter")
