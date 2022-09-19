@@ -15,13 +15,18 @@ Bonus: Suggestion yt
 
 ## tweet_music
 
-Pushes Metatags of Audio-Players  VLC or Clementine to your Twitter account
+Finds Metatags of Audio-Players
+*  VLC
+*  Clementine (KDE)
+*  Elisa (KDE)
+*  Chrome und Firefox mit Plasma-integration
+and sends as a Tweet to your Twitter-account
 
 Needs Linux/KDE with mpris, Bash,Twurl
 
 Twurl needs to be be authorized at Twitter
 
-Bonus: Suggestion yt
+Bonus: Suggests a Link to yt
 
 
 ![alt text](./images/music-tweet.png "Screenshot Twitter")
