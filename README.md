@@ -5,7 +5,13 @@
 
 ## toot_music
 
-Pushes Metatags of Audio-Players  VLC or Clementine to your Mastodon account
+Finds Metatags of Audio-Players
+*  VLC
+*  Clementine (KDE)
+*  Elisa (KDE)
+*  Chrome und Firefox mit Plasma-integration
+
+and sends as a Toot  to your Mastodon account
 
 Needs Linux/KDE with mpris, Bash,Toot
 
