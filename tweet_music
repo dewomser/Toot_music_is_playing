@@ -1,61 +1,40 @@
 #!/bin/bash
-
 #//config
 BASEDIR=$(readlink -f "$0" | xargs dirname)
-
-
 function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
-clementine=$(qdbus org.mpris.MediaPlayer2.clementine /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus)
-vlc=$(qdbus org.mpris.MediaPlayer2.vlc /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus)
-plasma=$(qdbus org.mpris.MediaPlayer2.plasma-browser-integration /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus)
-elisa=$(qdbus org.mpris.MediaPlayer2.elisa /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus)
 
-if [ "$clementine" == "Playing" ]
-then
-  player=clementine
-elif [ "$vlc" == "Playing" ]
-then
- player=vlc
-elif [ "$elisa" == "Playing" ]
-then
- player=elisa
-elif [ "$plasma" == "Playing" ]
-then
- player="plasma-browser-integration"
-else
-  exit
-fi
-
-#Path twurlis not EXPORT
+#Path twurl is not EXPORT
 twurlp="/usr/bin/ruby /home/karl/.local/share/gem/ruby/3.0.0/bin/twurl"
-#twurlp="twurl"
 user="dewomser"
-
-#//Musikinfo von Clementie Audioplayer holen
-
-# Ohne Test ob Variablen einenWert haben (von den 5 darf keine leer sein)
-
-#readarray -t a <<< "$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E 'artUrl|genre|artist|album:|title:'| sed -e 's/xesam://g'| sed -e 's/mpris:artUrl: file:\/\///g')"
-
-# Mit Test ob Variablen einen Wert haben
-# Test und Feedback ist erwünscht.
-
+#list of available player
+list_pl=( "clementine" "vlc" "elisa" "plasma-browser-intergration" )
+#active player
+for i in "${list_pl[@]}"
+do
+pl=$(qdbus org.mpris.MediaPlayer2."$i" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlaybackStatus 2>&1)
+if [ "$pl" == "Playing" ]
+then
+player="$i"
+fi
+done
+#get metadata fromplayer
+#Plasma-browser-integration wget cover
 if [ "$player" == "plasma-browser-integration" ]
 then
-lolo3="wget $(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')"
+lolo3="wget $(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')"
 $lolo3 -O cover.jpg
 a[0]=cover.jpg
 else
-a[0]="$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl: file:\/\///g')"
+a[0]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl: file:\/\///g')"
 if [ -z "${a[0]}" ]; then  a[0]="nocover.jpg"; fi
 fi
-a[1]="$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artist | sed -e 's/xesam://g')"
+a[1]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artist | sed -e 's/xesam://g')"
 if [ -z "${a[1]}" ]; then  a[1]="ohne"; fi
 
-a[2]="$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E album: | sed -e 's/xesam://g')"
+a[2]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E album: | sed -e 's/xesam://g')"
 if [ -z "${a[2]}" ]; then  a[2]="ohne"; fi
 
-a[4]="$(qdbus org.mpris.MediaPlayer2.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E title: | sed -e 's/xesam://g')"
+a[4]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E title: | sed -e 's/xesam://g')"
 if [ -z "${a[4]}" ]; then  a[4]="ohne"; fi
 
 #//Bild kopieren
@@ -63,7 +42,7 @@ lolo1=$(urldecode "${a[0]}")
 
 convert "$lolo1" -gravity south   -background YellowGreen  -splice 0x18 -annotate +0+2 'Die Tweet_Music-App ist vom @dewomser' "$BASEDIR"/cover.jpg
 
-#cp "$lolo1" "$PWD"/cover.jpg
+
 
 # Daten an den Twitterclient
 a[5]="https://www.youtube.com/results?search_query=${a[2]} ${a[4]}"
@@ -75,6 +54,9 @@ ${a[2]}
 ${a[1]}
 Audio-player:$player
 Video(geraten):$lolo"
+
+
+echo "$text"
 
 #// Bildgröße in Byte ermitteln
 byte=$(du -b cover.jpg | grep -Eo "^[0-9]+")
