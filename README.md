@@ -13,7 +13,7 @@ Finds Metatags of Audio-Players
 
 and sends as a Toot  to your Mastodon account
 
-Needs Linux with mpris, Bash,Toot
+Needs Linux with mpris, Bash,[Toot](https://toot.readthedocs.io/en/latest/index.html) (a Mastodeon CLI)
 
 Toot must be authorized at the Mastodon instance.
 
@@ -29,7 +29,7 @@ Finds Metatags of Audio-Players
 
 and sends as a Tweet to your Twitter-account
 
-Needs Linux with mpris, Bash, Twurl
+Needs Linux with mpris, Bash, [Twurl](https://github.com/twitter/twurl)
 
 Twurl needs to be be authorized by Twitter
 
