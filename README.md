@@ -13,7 +13,7 @@ Finds Metatags of Audio-Players
 
 and sends as a Toot  to your Mastodon account
 
-Needs Linux with mpris, Bash,[Toot](https://toot.readthedocs.io/en/latest/index.html) (a Mastodeon CLI)
+Needs Linux with mpris, Bash,[Toot](https://toot.readthedocs.io/en/latest/index.html) (a Mastodon CLI)
 
 Toot must be authorized at the Mastodon instance.
 
