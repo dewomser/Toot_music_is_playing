@@ -7,7 +7,7 @@ function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 twurlp="/usr/bin/ruby /home/karl/.local/share/gem/ruby/3.0.0/bin/twurl"
 user="dewomser"
 #list of available player
-list_pl=( "clementine" "vlc" "elisa" "plasma-browser-intergration" )
+list_pl=( "clementine" "vlc" "elisa" "plasma-browser-integration" )
 #active player
 for i in "${list_pl[@]}"
 do
@@ -17,6 +17,12 @@ then
 player="$i"
 fi
 done
+
+if [ "$player" == "" ]
+then
+exit
+fi
+
 #get metadata fromplayer
 #Plasma-browser-integration wget cover
 if [ "$player" == "plasma-browser-integration" ]
