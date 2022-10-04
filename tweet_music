@@ -27,21 +27,31 @@ fi
 #Plasma-browser-integration wget cover
 if [ "$player" == "plasma-browser-integration" ]
 then
+a[6]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E url: | sed -e 's/xesam://g')"
+
+lolo4=$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')
+if [ -z "$lolo4" ]; then  a[0]="nocover.jpg"
+else
 lolo3="wget $(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')"
 $lolo3 -O cover.jpg
 a[0]=cover.jpg
+fi
+
 else
 a[0]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl: file:\/\///g')"
 if [ -z "${a[0]}" ]; then  a[0]="nocover.jpg"; fi
 fi
 a[1]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artist | sed -e 's/xesam://g')"
-if [ -z "${a[1]}" ]; then  a[1]="ohne"; fi
+if [ -z "${a[1]}" ]; then  a[1]="Artist: ohne"; fi
 
 a[2]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E album: | sed -e 's/xesam://g')"
-if [ -z "${a[2]}" ]; then  a[2]="ohne"; fi
+if [ -z "${a[2]}" ]; then  a[2]="Album: ohne"; fi
 
 a[4]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E title: | sed -e 's/xesam://g')"
-if [ -z "${a[4]}" ]; then  a[4]="ohne"; fi
+if [ -z "${a[4]}" ]; then  a[4]="Title: ohne"; fi
+
+
+if [ -z "${a[6]}" ]; then  a[6]="Medialink: ohne"; fi
 
 #//Bild kopieren
 lolo1=$(urldecode "${a[0]}")
@@ -58,11 +68,15 @@ text="$text1
 ${a[4]}
 ${a[2]}
 ${a[1]}
-Audio-player:$player
-Video(geraten):$lolo"
+Media-player: $player
+Video (geraten): $lolo
+${a[6]} "
 
-
+# Nur zur Kontrolle
 echo "$text"
+echo Cover
+echo "${a[0]}"
+
 
 #// Bildgröße in Byte ermitteln
 byte=$(du -b cover.jpg | grep -Eo "^[0-9]+")
