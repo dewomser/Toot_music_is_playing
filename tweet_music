@@ -2,6 +2,7 @@
 #//config
 BASEDIR=$(readlink -f "$0" | xargs dirname)
 function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
+unset linkohnecover
 
 #Path twurl is not EXPORT
 twurlp="/usr/bin/ruby /home/karl/.local/share/gem/ruby/3.0.0/bin/twurl"
@@ -31,6 +32,8 @@ a[6]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris
 
 lolo4=$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')
 if [ -z "$lolo4" ]; then  a[0]="nocover.jpg"
+if [ "${a[6]}" ] && [ -z "${lolo4}" ]; then  linkohnecover=1 ;fi
+
 else
 lolo3="wget $(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')"
 $lolo3 -O cover.jpg
@@ -77,7 +80,19 @@ echo "$text"
 echo Cover
 echo "${a[0]}"
 
+if [ $linkohnecover ]
+then
+echo "link ohne text"
+else
+echo "cover"
+fi
 
+
+
+if [  $linkohnecover ]
+then
+$twurlp -u $user "/1.1/statuses/update.json" -d "status=$text"
+else
 #// Bildgröße in Byte ermitteln
 byte=$(du -b cover.jpg | grep -Eo "^[0-9]+")
 #// initialisieren
@@ -94,3 +109,5 @@ $twurlp -u $user -H upload.twitter.com "/1.1/media/upload.json" -d "command=FINA
 
 #//text hinzufügen
 $twurlp -u $user "/1.1/statuses/update.json" -d "media_ids=$mis&status=$text"
+
+fi
