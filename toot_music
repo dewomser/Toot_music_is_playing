@@ -79,10 +79,10 @@ ${a[6]} "
 
 
 # Nur zur Kontrolle
-echo "$text"
-echo Cover
-echo "${a[@]}"
-echo text\n $text
+#echo "$text"
+#echo Cover
+#echo "${a[@]}"
+#echo text\n $text
 
 if [ $linkohnecover ]
 then
