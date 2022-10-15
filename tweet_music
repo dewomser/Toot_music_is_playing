@@ -58,25 +58,32 @@ if [ -z "${a[6]}" ]; then  a[6]="Medialink: ohne"; fi
 
 #//Bild kopieren
 lolo1=$(urldecode "${a[0]}")
-
+# grüne Zeile
 convert "$lolo1" -gravity south   -background YellowGreen  -splice 0x18 -annotate +0+2 'Die Tweet_Music-App ist vom @dewomser' "$BASEDIR"/cover.jpg
 
 
 
 # Daten an den Twitterclient
-a[5]="https://www.youtube.com/results?search_query=${a[2]} ${a[4]}"
-lolo="${a[5]// /+}"
+a[5]="https://www.youtube.com/results?search_query=${a[2]// /+}+${a[4]// /+}"
+lolo="${a[5]}"
+
 text1=$"ich höre gerade:"
 text="$text1
 ${a[4]}
 ${a[2]}
 ${a[1]}
 Media-player: $player
-Video (geraten): $lolo
+Video (geraten): $(echo "$lolo"  | iconv -c -f UTF-8 -t ASCII//TRANSLIT)
 ${a[6]} "
 
+# Workaraound link mag keine Unlaute in der URL
+# text="$(echo "$text2" | iconv -c -f UTF-8 -t ASCII//TRANSLIT)"
+
+
 # Nur zur Kontrolle
+echo "komlpetter text tweet"
 echo "$text"
+echo "++Ende++"
 echo Cover
 echo "${a[0]}"
 
@@ -87,7 +94,10 @@ else
 echo "cover"
 fi
 
+#Test ohne twittern
+# exit
 
+# Ab geht die Twitterpost
 
 if [  $linkohnecover ]
 then
@@ -104,7 +114,7 @@ $twurlp -u $user -H upload.twitter.com "/1.1/media/upload.json" -d "command=APPE
 
 
 #//finalisieren
-$twurlp -u $user -H upload.twitter.com "/1.1/media/upload.json" -d "command=FINALIZE&media_id=$mis" | jq .
+$twurlp -u $user -H upload.twitter.com "/1.1/media/upload.json" -r "command=FINALIZE&media_id=$mis" | jq .
 
 
 #//text hinzufügen
