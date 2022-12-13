@@ -82,7 +82,7 @@ ${a[6]} "
 echo "$text"
 echo Cover
 echo "${a[@]}"
-echo text\n $text
+# echo text\n $text
 
 if [ $linkohnecover ]
 then
