@@ -38,10 +38,10 @@ a[0]=cover.jpg
 fi
 
 else
-a[0]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl: file:\/\///g')"
+a[0]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl: | sed -e 's/mpris:artUrl: file:\/\///g')"
 if [ -z "${a[0]}" ]; then  a[0]="nocover.jpg"; fi
 fi
-a[1]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artist | sed -e 's/xesam://g')"
+a[1]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artist: | sed -e 's/xesam://g')"
 if [ -z "${a[1]}" ]; then  a[1]="Artist: ohne"; fi
 
 a[2]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E album: | sed -e 's/xesam://g')"
@@ -79,10 +79,10 @@ ${a[6]} "
 
 
 # Nur zur Kontrolle
-#echo "$text"
-#echo Cover
-#echo "${a[@]}"
-#echo text\n $text
+echo "$text"
+echo Cover
+echo "${a[@]}"
+echo text\n $text
 
 if [ $linkohnecover ]
 then
@@ -101,5 +101,5 @@ else
 
 #echo -e "Ich höre gerade \n${a[4]}\n${a[2]}\n${a[1]}\n${a[3]}\nAudio-player:$player\nVideo(geraten):$lolo"
 #| toot post --media "cover.jpg"
-echo "$text" | toot post --media "cover.jpg"
+echo "$text" | toot post --media "$BASEDIR"/cover.jpg
 fi

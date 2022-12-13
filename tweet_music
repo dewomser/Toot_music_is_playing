@@ -3,9 +3,9 @@
 BASEDIR=$(readlink -f "$0" | xargs dirname)
 function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 unset linkohnecover
-
+declare -a a
 #Path twurl is not EXPORT
-twurlp="/usr/bin/ruby /home/karl/.local/share/gem/ruby/3.0.0/bin/twurl"
+twurlp="/home/karl/.gem/bin/twurl"
 user="dewomser"
 #list of available player
 list_pl=( "clementine" "vlc" "elisa" "plasma-browser-integration" )
@@ -41,10 +41,10 @@ a[0]=cover.jpg
 fi
 
 else
-a[0]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl: file:\/\///g')"
+a[0]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl: | sed -e 's/mpris:artUrl: file:\/\///g')"
 if [ -z "${a[0]}" ]; then  a[0]="nocover.jpg"; fi
 fi
-a[1]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artist | sed -e 's/xesam://g')"
+a[1]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artist: | sed -e 's/xesam://g')"
 if [ -z "${a[1]}" ]; then  a[1]="Artist: ohne"; fi
 
 a[2]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E album: | sed -e 's/xesam://g')"
@@ -95,7 +95,7 @@ echo "cover"
 fi
 
 #Test ohne twittern
-# exit
+#exit
 
 # Ab geht die Twitterpost
 
