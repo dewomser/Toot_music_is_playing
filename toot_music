@@ -58,7 +58,9 @@ lolo1=$(urldecode "${a[0]}")
 
 convert "$lolo1" -gravity south   -background YellowGreen  -splice 0x18 -annotate +0+2 'Die Tweet_Music-App ist vom @dewomser' "$BASEDIR"/cover.jpg
 
-
+#a[7]="$( ${a[6]} | sed -e 's/youtube/invidious/g')"
+#olo1="$(echo ${a[6]} |sed -e 's/www.youtube.com/invidio.us/g')"
+lolo1="$(echo "${a[6]}" | sed -e 's/[[:alpha:]]*.youtube.com/invidio.us/g')"
 
 # Daten an den Twitterclient
 a[5]="https://www.youtube.com/results?search_query=${a[2]} ${a[4]}"
@@ -70,7 +72,8 @@ ${a[2]}
 ${a[1]}
 Media-player: $player
 Video (geraten): $lolo
-${a[6]} "
+${a[6]}
+$lolo1"
 
 
 
@@ -82,7 +85,6 @@ ${a[6]} "
 echo "$text"
 echo Cover
 echo "${a[@]}"
-# echo text\n $text
 
 if [ $linkohnecover ]
 then
@@ -101,5 +103,5 @@ else
 
 #echo -e "Ich höre gerade \n${a[4]}\n${a[2]}\n${a[1]}\n${a[3]}\nAudio-player:$player\nVideo(geraten):$lolo"
 #| toot post --media "cover.jpg"
-echo "$text" | toot post --media "$BASEDIR"/cover.jpg
+echo "$text"| toot post --media "$BASEDIR"/cover.jpg
 fi
