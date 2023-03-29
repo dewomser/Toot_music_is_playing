@@ -60,7 +60,18 @@ convert "$lolo1" -gravity south   -background YellowGreen  -splice 0x18 -annotat
 
 #a[7]="$( ${a[6]} | sed -e 's/youtube/invidious/g')"
 #olo1="$(echo ${a[6]} |sed -e 's/www.youtube.com/invidio.us/g')"
-lolo1="$(echo "${a[6]}" | sed -e 's/[[:alpha:]]*.youtube.com/invidio.us/g')"
+
+## this is buggy ---shellcheck Grrrr#
+# wenn sed Ersatz nicht will. dann diese Zeile
+# lolo1="$(echo "${a[6]}" | sed -e 's/[[:alpha:]]*.youtube.com/invidio.us/g')"
+
+# sed Ersatz wegen shelcheck-terror
+lolo3=${a[6]}
+lolo2="${lolo3#*.}"
+lolo1="${lolo2/youtube.com/invidio.us}"
+## buggx end
+
+
 
 # Daten an den Twitterclient
 a[5]="https://www.youtube.com/results?search_query=${a[2]} ${a[4]}"
