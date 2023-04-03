@@ -63,7 +63,7 @@ convert "$lolo1" -gravity south   -background YellowGreen  -splice 0x18 -annotat
 
 ## this is buggy ---shellcheck Grrrr#
 # wenn sed Ersatz nicht will. dann diese Zeile
-# lolo1="$(echo "${a[6]}" | sed -e 's/[[:alpha:]]*.youtube.com/invidio.us/g')"
+#lolo1="$(echo "${a[6]}" | sed -e 's/[[:alpha:]]*.youtube.com/invidio.us/g')"
 
 # sed Ersatz wegen shelcheck-terror
 lolo3=${a[6]}
