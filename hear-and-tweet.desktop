@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment[de_DE]=
+Comment=
+Exec=cd /home/foo/git/tweet_and_toot/; ./tweet_music
+GenericName[de_DE]=
+GenericName=
+Icon=application-x-clementine
+MimeType=
+Name[de_DE]=Höre und Twitter
+Name=hear and tweet
+Path=
+StartupNotify=true
+Terminal=true
+TerminalOptions=\s--noclose
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=

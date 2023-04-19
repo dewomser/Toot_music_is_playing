@@ -1,0 +1,19 @@
+[Desktop Entry]
+Comment[de_DE]=
+Comment=
+Exec=/home/foo/git/tweet_and_toot/toot_music
+GenericName[de_DE]=Funktioniert nur wenn  der Audioplayer Sound abspielt
+GenericName=Audioplayer must be playing sound
+Icon=clementine
+MimeType=
+Name[de_DE]=Höre und Toote
+Name=hear and toot
+Path=
+StartupNotify=true
+Terminal=true
+TerminalOptions=\s--noclose
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
