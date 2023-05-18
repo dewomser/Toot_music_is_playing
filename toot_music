@@ -51,7 +51,7 @@ a[4]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris
 if [ -z "${a[4]}" ]; then  a[4]="Title: ohne"; fi
 
 
-if [ -z "${a[6]}" ]; then  a[6]="Medialink: ohne"; fi
+if [ -z "${a[6]}" ]; then  a[6]="url: ohne"; fi
 
 #//Bild kopieren
 lolo1=$(urldecode "${a[0]}")
@@ -61,21 +61,19 @@ convert "$lolo1" -gravity south   -background YellowGreen  -splice 0x18 -annotat
 #a[7]="$( ${a[6]} | sed -e 's/youtube/invidious/g')"
 #olo1="$(echo ${a[6]} |sed -e 's/www.youtube.com/invidio.us/g')"
 
-## this is buggy ---shellcheck Grrrr#
 # wenn sed Ersatz nicht will. dann diese Zeile
-#lolo1="$(echo "${a[6]}" | sed -e 's/[[:alpha:]]*.youtube.com/invidio.us/g')"
+# lolo1="$(echo "${a[6]}" | sed -e 's/[[:alpha:]]*.youtube.com/invidio.us/g')"
 
 # sed Ersatz wegen shelcheck-terror
 lolo3=${a[6]}
 lolo2="${lolo3#*.}"
-lolo1="${lolo2/youtube.com/invidio.us}"
-## buggx end
-
-
+lolo1="${lolo2/youtube.com/url: https:\/\/invidio.us}"
 
 # Daten an den Twitterclient
 a[5]="https://www.youtube.com/results?search_query=${a[2]} ${a[4]}"
 lolo="${a[5]// /+}"
+lolo=${lolo//\"/}
+
 text1=$"ich höre gerade:"
 text="$text1
 ${a[4]}
@@ -108,11 +106,11 @@ fi
 
 if [  $linkohnecover ]
 then
-echo "$text" | toot post
+echo "$text"| toot post
 else
 
 
 #echo -e "Ich höre gerade \n${a[4]}\n${a[2]}\n${a[1]}\n${a[3]}\nAudio-player:$player\nVideo(geraten):$lolo"
 #| toot post --media "cover.jpg"
-echo "$text"| toot post --media "$BASEDIR"/cover.jpg
+echo "$text"|toot post --media "$BASEDIR"/cover.jpg
 fi
