@@ -19,7 +19,11 @@ Toot must be authorized at the Mastodon instance.
 
 Bonus: Suggestion yt
 
-## tweet_music
+Example:
+![alt text](./images/music-tweet.png "Screenshot Twitter")
+
+## tweet_music ist kaputt
+## Twitter hat im Mai 2023 twurl abgeschaltet
 
 Finds Metatags of Audio-Players
 *  VLC
@@ -35,7 +39,4 @@ Twurl needs to be be authorized by Twitter
 
 Bonus: Suggests a Link to yt
 
-Example:
 
-
-![alt text](./images/music-tweet.png "Screenshot Twitter")
