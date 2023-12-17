@@ -32,8 +32,24 @@ if [ -z "$lolo4" ]; then  a[0]="nocover.jpg"
 if [ "${a[6]}" ] && [ -z "${lolo4}" ]; then  linkohnecover=1 ;fi
 
 else
+
+# Ab hier füe Nextcloud oder andere Musikwebseiten mit Anmeldung. Optional
+# Wenn das nicht benötigt wird, braucht man hier nichts ändern!
+# Ansonsten Variablen anpassen!
+
+lolo15=${lolo4%/*}
+if [ "$lolo15" == "https://irgendwas/index.php/apps/music/api/cover" ]
+then
+#entweder
+#lolo16="--user=foo --password=bar"
+#oder
+lolo16="--header 'Authorization: Basic aABCDEF0123456789='"
+else
+lolo16=""
+fi
+
 lolo3="wget $(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')"
-$lolo3 -O cover.jpg
+$lolo3 "$lolo16" -O cover.jpg
 a[0]=cover.jpg
 fi
 
