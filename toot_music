@@ -5,7 +5,7 @@ function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 unset linkohnecover
 
 #list of available player
-list_pl=( "clementine" "vlc" "elisa" "plasma-browser-integration" )
+list_pl=( "strawberry" "vlc" "elisa" "juk" "plasma-browser-integration" )
 #active player
 for i in "${list_pl[@]}"
 do
@@ -49,7 +49,10 @@ lolo16=""
 fi
 
 lolo3="wget $(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')"
+
 $lolo3 "$lolo16" -O cover.jpg
+
+
 a[0]=cover.jpg
 fi
 
@@ -100,6 +103,8 @@ Video (geraten): $lolo
 ${a[6]}
 $lolo1"
 
+description1=$(lyrics -t "${a[1]}" "${a[4]}")
+description="$(echo "$description1" | head -10)"
 
 
 
@@ -128,5 +133,6 @@ else
 
 #echo -e "Ich höre gerade \n${a[4]}\n${a[2]}\n${a[1]}\n${a[3]}\nAudio-player:$player\nVideo(geraten):$lolo"
 #| toot post --media "cover.jpg"
-echo "$text"|toot post --media "$BASEDIR"/cover.jpg
+echo "$text"|toot post --media "$BASEDIR"/cover.jpg --description "$description"
+
 fi
