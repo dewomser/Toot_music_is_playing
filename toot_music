@@ -103,13 +103,12 @@ Video (geraten): $lolo
 ${a[6]}
 $lolo1"
 
+# lyrics is part of python package lyrics-in-terminal https://github.com/Jugran/lyrics-in-terminal
+# if not installed do something like 
+# description="cover" and comment next 2 lines
+
 description1=$(lyrics -t "${a[1]}" "${a[4]}")
 description="$(echo "$description1" | head -10)"
-
-
-
-
-
 
 # Nur zur Kontrolle
 echo "$text"
