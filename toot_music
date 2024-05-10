@@ -5,7 +5,8 @@ function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
 unset linkohnecover
 
 #list of available player
-list_pl=( "strawberry" "vlc" "elisa" "juk" "plasma-browser-integration" )
+#todo: amarok liefert kein Cover
+list_pl=( "strawberry" "vlc" "elisa" "juk" "plasma-browser-integration" "amarok" "tauon")
 #active player
 for i in "${list_pl[@]}"
 do
