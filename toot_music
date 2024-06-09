@@ -76,7 +76,7 @@ if [ -z "${a[6]}" ]; then  a[6]="url: ohne"; fi
 #//Bild kopieren
 lolo1=$(urldecode "${a[0]}")
 
-convert "$lolo1" -gravity south   -background YellowGreen  -splice 0x18 -annotate +0+2 'Die Toot_Music-App ist vom @dewomser' "$BASEDIR"/cover.jpg
+magick "$lolo1" -gravity south   -background YellowGreen  -splice 0x18 -annotate +0+2 'Die Toot_Music-App ist vom @dewomser' "$BASEDIR"/cover.jpg
 
 #a[7]="$( ${a[6]} | sed -e 's/youtube/invidious/g')"
 #olo1="$(echo ${a[6]} |sed -e 's/www.youtube.com/invidio.us/g')"
