@@ -1,18 +1,21 @@
 # Toot_music_is_playing
 [![Trigger: Push action](https://github.com/dewomser/Tweet_and_toot_music_is_playing/actions/workflows/main.yml/badge.svg)](https://github.com/dewomser/Tweet_and_toot_music_is_playing/actions/workflows/main.yml) Shellchecked
 
-2 Shellscripts for Linux/KDE
+Shellscript for Linux/KDE
 
 ## toot_music
 
-Finds Metatags of Audio-Players
+Works with Metatags from these Audio-Players
 *  VLC
 *  Clementine (KDE)
-*  (Strawberry)
+*  Strawberry (KDE)
+*  amarok 3 (KDE)
 *  Elisa (KDE)
-*  Chrome und Firefox mit Plasma-integration
+*  cmus (console) No cover available
+*  Nextcloud Music (Browser with Plasma Integration) Script works after configuraion. Read!
+*  Chrome und Firefox(browser with Plasma-integration) youtube,bandcam and much more
 
-and sends as a Toot  to your Mastodon account
+and sends as a Toot  to your Mastodon account https://toot.bezdomni.net/
 
 Needs Linux with mpris, Bash,[Toot](https://toot.readthedocs.io/en/latest/index.html) (a Mastodon CLI)
 

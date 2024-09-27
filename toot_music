@@ -6,7 +6,7 @@ unset linkohnecover
 
 #list of available player
 #todo: amarok liefert kein Cover
-list_pl=( "strawberry" "vlc" "elisa" "juk" "plasma-browser-integration" "amarok" "tauon" "AudioTube")
+list_pl=( "strawberry" "vlc" "elisa" "juk" "plasma-browser-integration" "amarok" "cmus" "tauon" "AudioTube")
 #active player
 for i in "${list_pl[@]}"
 do
