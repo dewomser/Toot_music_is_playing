@@ -3,7 +3,7 @@
 
 Shellscript for Linux/KDE
 
-## toot_music
+## toot_music / ich höre gerade
 
 Works with Metatags from these Audio-Players
 *  VLC
