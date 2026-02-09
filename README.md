@@ -11,11 +11,13 @@ Works with Metatags from these Audio-Players
 *  Strawberry (KDE)
 *  amarok 3 (KDE)
 *  Elisa (KDE)
-*  cmus (console) No cover available
-*  Nextcloud Music (Browser with Plasma Integration) Script works after configuraion. Read!
+*  tauon
 *  Chrome und Firefox(browser with Plasma-integration) youtube,bandcam and much more
+*  cmus (console) No cover available / nur in Branch 2025
+*  Nextcloud Music (Browser with Plasma Integration) Script works after configuraion. Read! /Nur in Branch 2025
 
-and sends as a Toot  to your Mastodon account https://toot.bezdomni.net/
+
+and sends as a Toot  to your Mastodon account. Toot must be installed https://toot.bezdomni.net/
 
 Needs Linux with mpris, Bash,[Toot](https://toot.readthedocs.io/en/latest/index.html) (a Mastodon CLI)
 

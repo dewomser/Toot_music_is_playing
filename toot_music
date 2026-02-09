@@ -1,12 +1,12 @@
 #!/bin/bash
-#//config
-BASEDIR=$(readlink -f "$0" | xargs dirname)
-function urldecode() { : "${*//+/ }"; echo -e "${_//%/\\x}"; }
-unset linkohnecover
+#LANG=de_DE.UTF-8
+# export LANG
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US"
 
 #list of available player
 #todo: amarok liefert kein Cover
-list_pl=( "strawberry" "vlc" "elisa" "juk" "plasma-browser-integration" "amarok" "cmus" "tauon" "AudioTube")
+list_pl=( "strawberry" "vlc" "elisa" "juk" "plasma-browser-integration" "amarok" "tauon")
 #active player
 for i in "${list_pl[@]}"
 do
@@ -22,117 +22,83 @@ then
 exit
 fi
 
-#get metadata fromplayer
-#Plasma-browser-integration wget cover
-if [ "$player" == "plasma-browser-integration" ]
-then
-a[6]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E url: | sed -e 's/xesam://g')"
+# Fetch Amarok3 metadata
+#METADATA=$(qdbus org.kde.$player /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata)
+echo "$player"
+METADATA="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata)"
 
-lolo4=$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')
-if [ -z "$lolo4" ]; then  a[0]="nocover.jpg"
-if [ "${a[6]}" ] && [ -z "${lolo4}" ]; then  linkohnecover=1 ;fi
+echo "$METADATA"
+# Parse fields from metadata
+TITLE=$(echo "$METADATA" | grep 'xesam:title:' | sed 's/^.*xesam:title:[ \t]*//')
+ARTIST=$(echo "$METADATA" | grep 'xesam:artist:' | sed 's/^.*xesam:artist:[ \t]*//;s/\["//;s/"\]//')
+ALBUM=$(echo "$METADATA" | grep 'xesam:album:' | sed 's/^.*xesam:album:[ \t]*//')
+#COVER_URL=$(echo "$METADATA" | grep 'mpris:artUrl:' | sed 's/^.*mpris:artUrl:[ \t]*//')
+COVER_URL=$(echo "$METADATA" | grep 'mpris:artUrl:' |sed -e 's/^.*mpris:artUrl://g' -e 's/%20/ /g' -e 's/%7D/}/g' -e 's/%7B/{/g')
+#"$METADATA"|sed -e 's/%20/_/g' -e 's/file/lolo/g'
+#COVER_URL="$(echo "$METADATA" | grep 'xesam:url:' | sed 's/^.*xesam:url:[ \t]*/ /')"
+echo "cover_url:$COVER_URL"
+OUTFILE="amarok_spotify_wrapper.png"
+BG_COLOR="#181818"
+#TEXT_COLOR="#FFFFFF"
+TEXT_COLOR="#000000"
+ACCENT_COLOR="#1DB954"
+COVER_FILE="cover_tmp.png"
+COVER_OK=0
 
-else
-
-# Ab hier füe Nextcloud oder andere Musikwebseiten mit Anmeldung. Optional
-# Wenn das nicht benötigt wird, braucht man hier nichts ändern!
-# Ansonsten Variablen anpassen!
-
-lolo15=${lolo4%/*}
-if [ "$lolo15" == "https://irgendwas/index.php/apps/music/api/cover" ]
-then
-#entweder
-#lolo16="--user=foo --password=bar"
-#oder
-lolo16="--header 'Authorization: Basic aABCDEF0123456789='"
-else
-lolo16=""
+# If COVER_URL is a local file, extract and check existence
+#if [[ "$COVER_URL" == ^file://* ]]; then
+if echo "$COVER_URL" | grep -q "^ file://"; then
+    COVER_PATH="${COVER_URL/ file:\/\/}"
+    echo "if cover_path $COVER_PATH"
+    if [[ -f "$COVER_PATH" ]]; then
+        magick "$COVER_PATH" -resize 140x140^ -gravity center -extent 140x140 "$COVER_FILE"
+        echo "if_coverfile:$COVER_FILE"
+        COVER_OK=1
+    fi
 fi
+#140x140
+# Generate base PNG
+magick -size 600x200 xc:"$BG_COLOR" \
+    -fill "$ACCENT_COLOR" -draw "roundrectangle 20,20 580,180 20,20" \
+    "$OUTFILE"
 
-lolo3="wget $(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl | sed -e 's/mpris:artUrl://g')"
-
-$lolo3 "$lolo16" -O cover.jpg
-
-
-a[0]=cover.jpg
+# Overlay cover art if present
+if [[ "$COVER_OK" -eq 1 ]]; then
+    magick "$OUTFILE" "$COVER_FILE" -geometry +430+30 -composite "$OUTFILE"
 fi
+# +430+30
+# Add text fields
 
-else
-a[0]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artUrl: | sed -e 's/mpris:artUrl: file:\/\///g')"
-if [ -z "${a[0]}" ]; then  a[0]="nocover.jpg"; fi
-fi
-a[1]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E artist: | sed -e 's/xesam://g')"
-if [ -z "${a[1]}" ]; then  a[1]="Artist: ohne"; fi
+TITLE_K=$(echo "$TITLE" | cut -c 1-25)
+ARTIST_K=$(echo "$ARTIST" | cut -c 1-30)
+ALBUM_K=$(echo "$ALBUM" | cut -c 1-50)
+magick "$OUTFILE" \
+    -fill "$TEXT_COLOR" -pointsize 28 -gravity NorthWest -annotate +40+40 "$TITLE_K …" \
+    -fill "$TEXT_COLOR" -pointsize 20 -gravity NorthWest -annotate +40+90 "$ARTIST_K …" \
+    -fill "$TEXT_COLOR" -pointsize 16 -gravity NorthWest -annotate +40+140 "$ALBUM_K …" \
+    "$OUTFILE"
 
-a[2]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E album: | sed -e 's/xesam://g')"
-if [ -z "${a[2]}" ]; then  a[2]="Album: ohne"; fi
+echo "TITLE: $TITLE"
+echo "ARTIST: $ARTIST"
+echo "ALBUM: $ALBUM"
+echo "COVER_PATH: $COVER_PATH"
+echo "PNG generated: $OUTFILE"
 
-a[4]="$(qdbus org.mpris.MediaPlayer2."$player" /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Metadata | grep -E title: | sed -e 's/xesam://g')"
-if [ -z "${a[4]}" ]; then  a[4]="Title: ohne"; fi
-
-
-if [ -z "${a[6]}" ]; then  a[6]="url: ohne"; fi
-
-#//Bild kopieren
-lolo1=$(urldecode "${a[0]}")
-
-magick "$lolo1" -gravity south   -background YellowGreen  -splice 0x18 -annotate +0+2 'Die Toot_Music-App ist vom @dewomser' "$BASEDIR"/cover.jpg
-
-#a[7]="$( ${a[6]} | sed -e 's/youtube/invidious/g')"
-#olo1="$(echo ${a[6]} |sed -e 's/www.youtube.com/invidio.us/g')"
-
-# wenn sed Ersatz nicht will. dann diese Zeile
-# lolo1="$(echo "${a[6]}" | sed -e 's/[[:alpha:]]*.youtube.com/invidio.us/g')"
-
-# sed Ersatz wegen shelcheck-terror
-lolo3=${a[6]}
-lolo2="${lolo3#*.}"
-lolo1="${lolo2/youtube.com/url: https:\/\/invidio.us}"
-
-# Daten an den Twitterclient
-a[5]="https://www.youtube.com/results?search_query=${a[2]} ${a[4]}"
-lolo="${a[5]// /+}"
+lol="https://www.youtube.com/results?search_query=${TITLE} ${ARTIST}"
+lolo="${lol// /+}"
 lolo=${lolo//\"/}
 
-text1=$"ich höre gerade:"
+
+text1="ich höre gerade:"
 text="$text1
-${a[4]}
-${a[2]}
-${a[1]}
+Interpret: $ARTIST
 Media-player: $player
-Video (geraten): $lolo
-${a[6]}
-$lolo1"
+Video (geraten): $lolo"
 
-# lyrics is part of python package lyrics-in-terminal https://github.com/Jugran/lyrics-in-terminal
-# if not installed do something like 
-# description="cover" and comment next 2 lines
-
-description1=$(lyrics -t "${a[1]}" "${a[4]}")
-description="$(echo "$description1" | head -10)"
-
-# Nur zur Kontrolle
 echo "$text"
-echo Cover
-echo "${a[@]}"
+description="$TITLE, $ARTIST, $ALBUM"
+echo $description
+echo "$text"|toot post --media "$OUTFILE" --description "$description"
 
-if [ $linkohnecover ]
-then
-echo "link ohne text"
-else
-echo "cover"
-fi
-
-
-
-if [  $linkohnecover ]
-then
-echo "$text"| toot post
-else
-
-
-#echo -e "Ich höre gerade \n${a[4]}\n${a[2]}\n${a[1]}\n${a[3]}\nAudio-player:$player\nVideo(geraten):$lolo"
-#| toot post --media "cover.jpg"
-echo "$text"|toot post --media "$BASEDIR"/cover.jpg --description "$description"
-
-fi
+ #Clean up temp cover
+ rm -f "$COVER_FILE"
