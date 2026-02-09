@@ -97,7 +97,7 @@ Video (geraten): $lolo"
 
 echo "$text"
 description="$TITLE, $ARTIST, $ALBUM"
-echo $description
+echo "$description"
 echo "$text"|toot post --media "$OUTFILE" --description "$description"
 
  #Clean up temp cover
