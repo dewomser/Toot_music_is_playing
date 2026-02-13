@@ -13,8 +13,8 @@ Works with Metatags from these Audio-Players
 *  Elisa (KDE)
 *  tauon
 *  Chrome und Firefox(browser with Plasma-integration) youtube,bandcam and much more
-*  cmus (console) No cover available / nur in Branch 2025
-*  Nextcloud Music (Browser with Plasma Integration) Script works after configuraion. Read! /Nur in Branch 2025
+*  Nextcloud Music (Browser with Plasma Integration)
+*  cmus (console) No cover available works but not activated
 
 
 and sends as a Toot  to your Mastodon account. Toot must be installed https://toot.bezdomni.net/

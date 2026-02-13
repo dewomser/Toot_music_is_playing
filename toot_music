@@ -6,7 +6,7 @@ export LANG="en_US"
 
 #list of available player
 #todo: amarok liefert kein Cover
-list_pl=( "strawberry" "vlc" "elisa" "juk" "plasma-browser-integration" "amarok" "tauon")
+list_pl=( "strawberry" "vlc" "elisa" "juk" "plasma-browser-integration" "amarok" "tauon" "AudioTube")
 #active player
 for i in "${list_pl[@]}"
 do
