@@ -6,7 +6,7 @@ export LANG="en_US"
 
 #list of available player
 #todo: amarok liefert kein Cover
-list_pl=( "strawberry" "vlc" "elisa" "juk" "plasma-browser-integration" "amarok" "tauon" "AudioTube")
+list_pl=( "strawberry" "vlc" "elisa" "juk" "plasma-browser-integration" "amarok" "tauon" "AudioTube" "kasts")
 #active player
 for i in "${list_pl[@]}"
 do
@@ -58,7 +58,8 @@ if echo "$COVER_URL" | grep -q "^ file://"; then
 fi
 #140x140
 # Generate base PNG
-magick -size 600x200 xc:"$BG_COLOR" \
+# Hintergtund transparent gemacht xc:"$BG_COLOR"
+magick -size 600x200 xc:none \
     -fill "$ACCENT_COLOR" -draw "roundrectangle 20,20 580,180 20,20" \
     "$OUTFILE"
 
