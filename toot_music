@@ -38,7 +38,7 @@ COVER_URL=$(echo "$METADATA" | grep 'mpris:artUrl:' |sed -e 's/^.*mpris:artUrl:/
 #COVER_URL="$(echo "$METADATA" | grep 'xesam:url:' | sed 's/^.*xesam:url:[ \t]*/ /')"
 echo "cover_url:$COVER_URL"
 OUTFILE="amarok_spotify_wrapper.png"
-BG_COLOR="#181818"
+#BG_COLOR="#181818"
 #TEXT_COLOR="#FFFFFF"
 TEXT_COLOR="#000000"
 ACCENT_COLOR="#1DB954"
